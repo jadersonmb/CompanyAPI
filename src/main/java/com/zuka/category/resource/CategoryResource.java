@@ -8,6 +8,8 @@ import java.util.UUID;
 
 import javax.validation.Valid;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -36,6 +38,7 @@ public class CategoryResource implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private CategoryService categoryService;
+    private final Logger log = LoggerFactory.getLogger(CategoryResource.class);
 
     @Autowired
     private CategoryResource (CategoryService categoryService){
@@ -44,12 +47,16 @@ public class CategoryResource implements Serializable {
 
     @GetMapping
     public ResponseEntity<?> listAll(Pageable pageable, CategoryDTO filter) {
+        log.debug("REST request to get all Category");
+        
         Page<CategoryDTO> listAllCategoryDTO = categoryService.listAll(pageable, filter);
         return ResponseEntity.ok().body(listAllCategoryDTO);
     }
 
     @PostMapping
     public ResponseEntity<?> save(@RequestBody @Valid CategoryDTO categoryDTO) {
+    	log.debug("REST request to save Category : {}", categoryDTO);
+    	
         CategoryDTO categoryReturnDTO = categoryService.save(categoryDTO);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(categoryReturnDTO.getId()).toUri();
         return ResponseEntity.created(uri).body(categoryReturnDTO);
@@ -58,6 +65,8 @@ public class CategoryResource implements Serializable {
 
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<?> delete(@PathVariable UUID id) {
+    	log.debug("REST request to get Category : {}", id);
+    	
         CategoryDTO categoryDTO = categoryService.findById(id);
         categoryService.delete(categoryDTO);
         return ResponseEntity.ok().build();
@@ -65,12 +74,16 @@ public class CategoryResource implements Serializable {
 
     @RequestMapping(value = "/deleteList/{ids}", method=RequestMethod.DELETE)
     public ResponseEntity<?> deleteList(@PathVariable List<UUID> ids) {
+    	log.debug("REST request to delete Category : {}", ids);
+    	
         categoryService.deleteList(ids);
         return ResponseEntity.ok().build();
     }
 
     @PutMapping
     public ResponseEntity<?> update(@RequestBody CategoryDTO categoryDTO) {
+    	log.debug("REST request to update Category : {}", categoryDTO);
+    	
         CategoryDTO categorySaveDTO = categoryService.findById(categoryDTO.getId());
         if(Objects.nonNull(categorySaveDTO.getId())) {
             BeanUtils.copyProperties(categoryDTO, categorySaveDTO, "id");

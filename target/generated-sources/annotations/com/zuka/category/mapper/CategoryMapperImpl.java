@@ -1,15 +1,16 @@
 package com.zuka.category.mapper;
 
 import com.zuka.category.dto.CategoryDTO;
+import com.zuka.category.dto.CategoryDTO.CategoryDTOBuilder;
 import com.zuka.category.model.Category;
-import java.util.UUID;
-import javax.annotation.processing.Generated;
+import com.zuka.category.model.Category.CategoryBuilder;
+import javax.annotation.Generated;
 import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2020-10-25T11:41:18+0000",
-    comments = "version: 1.4.0.Final, compiler: javac, environment: Java 11.0.8 (Oracle Corporation)"
+    date = "2020-10-25T11:55:50+0000",
+    comments = "version: 1.4.0.Final, compiler: Eclipse JDT (IDE) 3.20.0.v20191203-2131, environment: Java 1.8.0_231 (Oracle Corporation)"
 )
 @Component
 public class CategoryMapperImpl implements CategoryMapper {
@@ -20,11 +21,12 @@ public class CategoryMapperImpl implements CategoryMapper {
             return null;
         }
 
-        UUID id = null;
+        CategoryDTOBuilder categoryDTO = CategoryDTO.builder();
 
-        CategoryDTO categoryDTO = new CategoryDTO( id );
+        categoryDTO.id( category.getId() );
+        categoryDTO.name( category.getName() );
 
-        return categoryDTO;
+        return categoryDTO.build();
     }
 
     @Override
@@ -33,8 +35,11 @@ public class CategoryMapperImpl implements CategoryMapper {
             return null;
         }
 
-        Category category = new Category();
+        CategoryBuilder category = Category.builder();
 
-        return category;
+        category.id( categoryDTO.getId() );
+        category.name( categoryDTO.getName() );
+
+        return category.build();
     }
 }
