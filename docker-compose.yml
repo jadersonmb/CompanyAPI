@@ -3,12 +3,12 @@ services:
  docker-app:
     image: company
     ports:
-      - "8080:8080"
+      - "8080:8083"
     depends_on:
       - docker-postgres
  docker-postgres:
     image: postgres:10.4
     environment:
-      - POSTGRES_DB=db
+      - POSTGRES_DB=db_company
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres

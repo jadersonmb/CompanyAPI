@@ -30,6 +30,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.zuka.company.dto.CompanyDTO;
 import com.zuka.company.exception.CompanyException;
 import com.zuka.company.exception.Problem;
+import com.zuka.company.service.CategoryService;
 import com.zuka.company.service.CompanyService;
 
 @RestController()
@@ -37,12 +38,16 @@ import com.zuka.company.service.CompanyService;
 public class CompanyResource implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    private CompanyService companyService;
     private final Logger log = LoggerFactory.getLogger(CompanyResource.class);
+    
+    private CompanyService companyService;
+    private CategoryService categoryService;
+    
 
     @Autowired
-    private CompanyResource (CompanyService companyService){
+    private CompanyResource (CompanyService companyService, CategoryService categoryService){
         this.companyService = companyService;
+        this.categoryService = categoryService;
     }
 
     @GetMapping
@@ -50,6 +55,7 @@ public class CompanyResource implements Serializable {
         log.debug("REST request to get all Company");
         
         Page<CompanyDTO> listAllCompanyDTO = companyService.listAll(pageable, filter);
+        listAllCompanyDTO.stream().forEach(p-> p.setCategory(categoryService.findByCategoryId(p.getCategory().getId())));
         return ResponseEntity.ok().body(listAllCompanyDTO);
     }
 

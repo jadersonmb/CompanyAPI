@@ -8,9 +8,12 @@ import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
+
+import com.zuka.company.dto.CategoryDTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -52,5 +55,11 @@ public class Company implements Serializable {
 	
 	@Embedded
 	private Address address;
+	
+	@Column(name = "company_id", nullable = false)
+	private UUID companyId;
+	
+	@Transient
+	private CategoryDTO category;
 
 }

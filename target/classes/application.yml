@@ -1,0 +1,16 @@
+spring: 
+  application: 
+    name: CompanyAPI 
+  h2:
+    console:
+     settings:
+      trace: true 
+server: 
+  port: 6262 
+ 
+eureka: 
+  client: 
+    service-url: 
+      default-zone: ${EUREKA_URI:https://localhost:8761/eureka}
+  instance: 
+    prefer-ip-address: true
