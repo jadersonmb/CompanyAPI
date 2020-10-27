@@ -1,10 +1,10 @@
-# CategoryAPI
+# CompanyAPI
 
 [![N|Solid](https://cldup.com/dTxpPi9lDf.thumb.png)](https://nodesource.com/products/nsolid)
 
 [![Build Status](https://travis-ci.org/joemccann/dillinger.svg?branch=master)](https://travis-ci.org/joemccann/dillinger)
 
-API category que tem os seguintes endpoits.
+API company que tem os seguintes endpoits.
 
   - Save
   - Delete
@@ -35,7 +35,7 @@ Lombok
 PostgreSQL
 H2
 ```
-# CategoryAPI Swagger-ui
+# CompanyAPI Swagger-ui
 ```sh
 http://localhost:8080/swagger-ui/index.html?configUrl=/v3/api-docs/swagger-config#/
 ```
