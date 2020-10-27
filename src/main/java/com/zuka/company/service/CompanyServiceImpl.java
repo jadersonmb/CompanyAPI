@@ -56,7 +56,6 @@ public class CompanyServiceImpl implements CompanyService {
 	@Override
 	public CompanyDTO save(CompanyDTO companyDTO) throws CompanyException {
 		BusinessRulesSave(companyDTO);
-		
 		Company company = companyRepository.save(mapper.toCompany(companyDTO));
 		return mapper.toCompanyDTO(company);
 	}

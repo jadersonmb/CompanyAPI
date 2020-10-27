@@ -34,7 +34,7 @@ import com.zuka.company.service.CategoryService;
 import com.zuka.company.service.CompanyService;
 
 @RestController()
-@RequestMapping(value = "/api/company")
+@RequestMapping(value = "/company")
 public class CompanyResource implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -55,7 +55,7 @@ public class CompanyResource implements Serializable {
         log.debug("REST request to get all Company");
         
         Page<CompanyDTO> listAllCompanyDTO = companyService.listAll(pageable, filter);
-        listAllCompanyDTO.stream().forEach(p-> p.setCategory(categoryService.findByCategoryId(p.getCategory().getId())));
+        listAllCompanyDTO.stream().forEach(p-> p.setCategory(categoryService.findByCategoryId(p.getCompanyId())));
         return ResponseEntity.ok().body(listAllCompanyDTO);
     }
 

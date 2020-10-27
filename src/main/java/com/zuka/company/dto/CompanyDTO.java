@@ -28,7 +28,7 @@ public class CompanyDTO implements Serializable {
     private String name;
     @CNPJ
     private String cnpj;
-    
+    private UUID companyId;
     private CategoryDTO category;
 
     public CompanyDTO(UUID id){
