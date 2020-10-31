@@ -4,15 +4,18 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import com.zuka.company.dto.CategoryDTO;
 import com.zuka.company.dto.CompanyDTO;
 import com.zuka.company.exception.CompanyException;
 import com.zuka.company.exception.ProblemType;
@@ -25,15 +28,17 @@ import com.zuka.company.repository.CompanySpec;
 public class CompanyServiceImpl implements CompanyService {
 
 	private CompanyRepository companyRepository;
+	private CategoryService categoryService;
 	private CompanyMapper mapper;
 	private MessageSource messageSource;
 
 	@Autowired
 	public CompanyServiceImpl(CompanyRepository companyRepository, CompanyMapper mapper,
-			MessageSource messageSource) {
+			MessageSource messageSource, CategoryService categoryService) {
 		this.companyRepository = companyRepository;
 		this.mapper = mapper;
 		this.messageSource = messageSource;
+		this.categoryService = categoryService;
 	}
 
 	private void BusinessRulesSave(CompanyDTO companyDTO) throws CompanyException {
@@ -54,15 +59,33 @@ public class CompanyServiceImpl implements CompanyService {
 	}
 
 	@Override
-	public CompanyDTO save(CompanyDTO companyDTO) throws CompanyException {
+	public Company save(CompanyDTO companyDTO) throws CompanyException {
 		BusinessRulesSave(companyDTO);
-		Company company = companyRepository.save(mapper.toCompany(companyDTO));
-		return mapper.toCompanyDTO(company);
+		Company company  = mapper.toCompany(companyDTO);
+		company.setCategoryId(companyDTO.getCategory().getId());
+		return companyRepository.save(company);
+	}
+	
+	@Override
+	public CompanyDTO saveCompany(CompanyDTO companyDTO) throws CompanyException {
+		Company company = save(companyDTO);
+		CompanyDTO dto = mapper.toCompanyDTO(company);
+		dto.setCategory(findByCategoryId(company.getCategoryId()));
+		return dto;
 	}
 
 	@Override
 	public Page<CompanyDTO> listAll(Pageable pageable, CompanyDTO filter) throws CompanyException {
-		return companyRepository.findAll(CompanySpec.searchDesc(filter), pageable).map(mapper::toCompanyDTO);
+		Page<Company> companyPage = companyRepository.findAll(CompanySpec.searchDesc(filter), pageable);
+		return new PageImpl<CompanyDTO>(companyPage
+                .stream()
+                .map(p -> new CompanyDTO(
+                        p.getId(),
+                        p.getName(),
+                        p.getCnpj(),
+                        p.getAddress(),
+                        findByCategoryId(p.getCategoryId())))
+                .collect(Collectors.toList()), pageable, companyPage.getTotalElements());
 	}
 
 	@Override
@@ -84,6 +107,10 @@ public class CompanyServiceImpl implements CompanyService {
 				.toCompanyDTO(obj.orElseThrow(() -> new CompanyException(HttpStatus.BAD_REQUEST.value(),
 						problemType.getTitle(), problemType.getUri(), messageDetails)));
 		return companyDTO;
+	}
+	
+	private CategoryDTO findByCategoryId(UUID categoryId) {
+		return categoryService.findByCategoryId(categoryId);
 	}
 
 }

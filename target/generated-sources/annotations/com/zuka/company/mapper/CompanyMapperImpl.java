@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2020-10-27T22:13:11+0000",
+    date = "2020-10-31T01:19:09+0000",
     comments = "version: 1.4.0.Final, compiler: Eclipse JDT (IDE) 3.20.0.v20191203-2131, environment: Java 1.8.0_231 (Oracle Corporation)"
 )
 @Component
@@ -23,9 +23,8 @@ public class CompanyMapperImpl implements CompanyMapper {
 
         CompanyDTOBuilder companyDTO = CompanyDTO.builder();
 
-        companyDTO.category( company.getCategory() );
+        companyDTO.address( company.getAddress() );
         companyDTO.cnpj( company.getCnpj() );
-        companyDTO.companyId( company.getCompanyId() );
         companyDTO.id( company.getId() );
         companyDTO.name( company.getName() );
 
@@ -40,9 +39,8 @@ public class CompanyMapperImpl implements CompanyMapper {
 
         CompanyBuilder company = Company.builder();
 
-        company.category( companyDTO.getCategory() );
+        company.address( companyDTO.getAddress() );
         company.cnpj( companyDTO.getCnpj() );
-        company.companyId( companyDTO.getCompanyId() );
         company.id( companyDTO.getId() );
         company.name( companyDTO.getName() );
 

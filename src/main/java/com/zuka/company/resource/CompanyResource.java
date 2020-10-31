@@ -30,24 +30,21 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.zuka.company.dto.CompanyDTO;
 import com.zuka.company.exception.CompanyException;
 import com.zuka.company.exception.Problem;
-import com.zuka.company.service.CategoryService;
 import com.zuka.company.service.CompanyService;
 
-@RestController()
-@RequestMapping(value = "/company")
+@RestController
+@RequestMapping
 public class CompanyResource implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private final Logger log = LoggerFactory.getLogger(CompanyResource.class);
     
     private CompanyService companyService;
-    private CategoryService categoryService;
     
 
     @Autowired
-    private CompanyResource (CompanyService companyService, CategoryService categoryService){
+    private CompanyResource (CompanyService companyService){
         this.companyService = companyService;
-        this.categoryService = categoryService;
     }
 
     @GetMapping
@@ -55,7 +52,6 @@ public class CompanyResource implements Serializable {
         log.debug("REST request to get all Company");
         
         Page<CompanyDTO> listAllCompanyDTO = companyService.listAll(pageable, filter);
-        listAllCompanyDTO.stream().forEach(p-> p.setCategory(categoryService.findByCategoryId(p.getCompanyId())));
         return ResponseEntity.ok().body(listAllCompanyDTO);
     }
 
@@ -63,7 +59,7 @@ public class CompanyResource implements Serializable {
     public ResponseEntity<?> save(@RequestBody @Valid CompanyDTO CompanyDTO) {
     	log.debug("REST request to save Company : {}", CompanyDTO);
     	
-        CompanyDTO CompanyReturnDTO = companyService.save(CompanyDTO);
+        CompanyDTO CompanyReturnDTO = companyService.saveCompany(CompanyDTO);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(CompanyReturnDTO.getId()).toUri();
         return ResponseEntity.created(uri).body(CompanyReturnDTO);
 

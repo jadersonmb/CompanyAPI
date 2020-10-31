@@ -9,11 +9,13 @@ import org.springframework.stereotype.Service;
 
 import com.zuka.company.dto.CompanyDTO;
 import com.zuka.company.exception.CompanyException;
+import com.zuka.company.model.Company;
 
 @Service
 public interface CompanyService {
 
-	CompanyDTO save(CompanyDTO companyDTO) throws CompanyException;
+	Company save(CompanyDTO companyDTO) throws CompanyException;
+	CompanyDTO saveCompany(CompanyDTO companyDTO) throws CompanyException;
 	Page<CompanyDTO> listAll(Pageable pageable, CompanyDTO filter) throws CompanyException;
 	void delete(CompanyDTO companyDTO) throws CompanyException;
 	CompanyDTO findById(UUID id) throws CompanyException;

@@ -11,6 +11,6 @@ import com.zuka.company.dto.CategoryDTO;
 @Service
 public interface CategoryService {
 
-	@GetMapping(value = "/api/category/{id}")
+	@GetMapping(value = "/findById/{id}")
 	CategoryDTO findByCategoryId(@PathVariable("id") UUID id);
 }

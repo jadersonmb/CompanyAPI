@@ -7,6 +7,8 @@ import javax.validation.constraints.NotBlank;
 
 import org.hibernate.validator.constraints.br.CNPJ;
 
+import com.zuka.company.model.Address;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -28,7 +30,7 @@ public class CompanyDTO implements Serializable {
     private String name;
     @CNPJ
     private String cnpj;
-    private UUID companyId;
+    private Address address;
     private CategoryDTO category;
 
     public CompanyDTO(UUID id){

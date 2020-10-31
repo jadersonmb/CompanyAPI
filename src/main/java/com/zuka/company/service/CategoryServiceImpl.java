@@ -20,11 +20,11 @@ public class CategoryServiceImpl implements CategoryService {
 	@Override
 	@HystrixCommand(fallbackMethod = "defaultCategory")
 	public CategoryDTO findByCategoryId(UUID id) {
-		return restTemplate.getForObject("http://CategoryAPI/api/category/{id}", CategoryDTO.class, id);
+		return restTemplate.getForObject("http://CATEGORYAPI/findById/{id}", CategoryDTO.class, id);
 	}
 	
 	@SuppressWarnings("unused")
-	private CategoryDTO defaultCategory() {
+	private CategoryDTO defaultCategory(UUID id) {
 		return new CategoryDTO();
 	}
 }
